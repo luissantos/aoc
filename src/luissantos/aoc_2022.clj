@@ -56,8 +56,7 @@
    (range 1 53)))
 
 (defn parse-rucksack [rs]
-  (let [rs (seq rs)]
-    (split-at (/ (count rs) 2) rs)))
+  (split-at (/ (count rs) 2) rs))
 
 (defn item-priority [col]
   (->> col
@@ -75,7 +74,6 @@
 (defn day3-part2 []
   (->> (string/split-lines (slurp "input/day-3-input-1.txt"))
        (partition 3)
-       (map seq)
        (map item-priority)
        (reduce +)))
 
