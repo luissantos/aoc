@@ -6,7 +6,7 @@
   "Assumes that there no snacks with Zero calories"
   []
   (->> (string/split-lines (slurp "input/day-1-input-1.txt"))
-       (map #(if (empty? %) 0 (Integer/parseInt %)))
+       (map #(if (empty? %) 0 (parse-long %)))
        (partition-by zero?)
        (map #(reduce + %))
        (sort >)
@@ -59,24 +59,38 @@
   (split-at (/ (count rs) 2) rs))
 
 (defn item-priority [col]
-  (->> col
-       (map set)
+  (->> (map set col)
        (apply clojure.set/intersection)
        (first)
        (priorities)))
 
-(defn day3-part1 []
-  (->> (string/split-lines (slurp "input/day-3-input-1.txt"))
-       (map parse-rucksack)
-       (map item-priority)
-       (reduce +)))
+(defn day3 []
+  (let [lines (string/split-lines (slurp "input/day-3-input-1.txt"))]
+    {:part1 (reduce + (map item-priority (map parse-rucksack lines)))
+     :part2 (reduce + (map item-priority (partition 3 lines)))}))
 
-(defn day3-part2 []
-  (->> (string/split-lines (slurp "input/day-3-input-1.txt"))
-       (partition 3)
-       (map item-priority)
-       (reduce +)))
+(defn parse-assignment [a]
+  (->> (string/split a #"-|,")
+       (map parse-long)
+       (partition 2)
+       (map (fn [[a b]] (range a (inc b))))
+       (map set)))
+
+(defn subset? [[a b]]
+  (or (clojure.set/subset? a b)
+      (clojure.set/subset? b a)))
+
+(defn intersection? [[a b]]
+  (not (empty? (clojure.set/intersection a b))))
+
+(defn day4 []
+  (let [in (slurp "input/day-4-input-1.txt")
+        assignments (map parse-assignment (string/split-lines in))
+        count-assignments #(count (filter true? %))]
+    {:part1 (count-assignments (map subset? assignments))
+     :part2 (count-assignments (map intersection? assignments))}))
 
 (defn -main
   [& args]
-  (println (day3-part2)))
+  (println (day4)))
+
