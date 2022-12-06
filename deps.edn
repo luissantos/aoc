@@ -1,5 +1,6 @@
 {:paths ["src" "resources"]
- :deps {org.clojure/clojure {:mvn/version "1.11.1"}}
+ :deps {org.clojure/clojure {:mvn/version "1.11.1"}
+        io.github.nextjournal/clerk {:mvn/version "0.12.699"}}
  :aliases
  {:run-m {:main-opts ["-m" "luissantos.aoc-2022"]}
   :run-x {:ns-default luissantos.aoc-2022
